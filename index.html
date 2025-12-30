@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewind 2025: Luis & Nadia</title>
+    
+    <!-- Tailwind CSS (para estructura de layout) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js para visualización de datos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Iconos Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Importación de Fuentes Google Fonts */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400&display=swap');
+
+        /* --- ESTILOS PREMIUM & UTILIDADES (REQUERIDOS) --- */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FAFAFA;
+            color: #2D1B2E;
+            overflow-x: hidden;
+        }
+
+        /* Ruido de fondo para textura premium */
+        .noise-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.03;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .gradient-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+            background: 
+                radial-gradient(at 0% 0%, hsla(253,16%,7%,0) 0, hsla(253,16%,7%,0) 50%), 
+                radial-gradient(at 100% 0%, hsla(339,49%,80%,1) 0, transparent 50%), 
+                radial-gradient(at 0% 100%, hsla(339,49%,90%,1) 0, transparent 50%), 
+                radial-gradient(at 80% 50%, hsla(268,36%,95%,1) 0, transparent 50%), 
+                radial-gradient(at 0% 50%, hsla(339,49%,95%,1) 0, transparent 50%);
+        }
+
+        /* Tipografía Editorial */
+        .font-editorial {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Glassmorphism 2.0 */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.03);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.08);
+            border-color: rgba(255, 255, 255, 1);
+        }
+
+        /* Animaciones */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes float-up {
+          0% { transform: translateY(0) scale(1); opacity: 1; }
+          100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+
+        @keyframes pop-in {
+            0% { opacity: 0; transform: scale(0.95) translateY(10px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-breathe { animation: breathe 4s ease-in-out infinite; }
+        .animate-float-up { animation: float-up 4s ease-out forwards; }
+        
+        /* Staggered animation classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+
+        /* Scrollbar oculta pero funcional */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.1);
+            border-radius: 10px;
+        }
+
+        /* Estilos de texto */
+        .text-gradient {
+            background: linear-gradient(135deg, #2D1B2E 0%, #865D87 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Custom layout tweaks */
+        .stat-value {
+            font-feature-settings: "tnum";
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-pink-200 selection:text-pink-900">
+
+    <div class="noise-bg"></div>
+    <div class="gradient-mesh"></div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-4xl mx-auto px-4 py-12 md:py-20 flex flex-col gap-24">
+
+        <!-- HEADER / INTRO -->
+        <header class="text-center min-h-[60vh] flex flex-col justify-center items-center relative reveal active">
+            <div class="absolute top-0 animate-float opacity-30">
+                <i data-lucide="message-circle-heart" class="w-32 h-32 text-pink-300"></i>
+            </div>
+            
+            <p class="text-sm tracking-[0.3em] uppercase text-gray-500 mb-6 font-medium">Chat Analysis Report</p>
+            <h1 class="font-editorial text-7xl md:text-9xl mb-4 text-gradient leading-tight">
+                Rewind<br><span class="italic text-5xl md:text-7xl block mt-2 text-gray-700">2025</span>
+            </h1>
+            
+            <div class="flex items-center gap-4 mt-8 glass-panel px-6 py-3 rounded-full">
+                <span class="font-semibold text-gray-800">Luis Ortiz</span>
+                <span class="text-pink-500">×</span>
+                <span class="font-semibold text-gray-800">Nadia ♡</span>
+            </div>
+            
+            <p class="mt-8 text-gray-500 max-w-md mx-auto text-lg leading-relaxed">
+                Una historia contada a través de <br>
+                <span class="font-bold text-gray-800">44,725 mensajes</span> y 
+                <span class="font-bold text-gray-800">319 días</span> de conexión ininterrumpida.
+            </p>
+        </header>
+
+        <!-- SECTION 1: GENERAL STATS -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="glass-card p-8 rounded-3xl text-center reveal">
+                <div class="w-12 h-12 mx-auto bg-pink-100 rounded-full flex items-center justify-center mb-4 text-pink-600">
+                    <i data-lucide="flame"></i>
+                </div>
+                <h3 class="text-gray-500 text-sm uppercase tracking-wider mb-1">Racha Histórica</h3>
+                <p class="font-editorial text-5xl text-gradient stat-value">319</p>
+                <p class="text-sm text-gray-400 mt-2">Días seguidos hablando</p>
+            </div>
+            
+            <div class="glass-card p-8 rounded-3xl text-center reveal delay-100">
+                <div class="w-12 h-12 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-4 text-purple-600">
+                    <i data-lucide="calendar-heart"></i>
+                </div>
+                <h3 class="text-gray-500 text-sm uppercase tracking-wider mb-1">Día Más Activo</h3>
+                <p class="font-editorial text-3xl text-gray-800 mt-2">29 Sep</p>
+                <p class="text-sm text-gray-400 mt-2">427 mensajes en 24h</p>
+            </div>
+
+            <div class="glass-card p-8 rounded-3xl text-center reveal delay-200">
+                <div class="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4 text-blue-600">
+                    <i data-lucide="clock"></i>
+                </div>
+                <h3 class="text-gray-500 text-sm uppercase tracking-wider mb-1">Promedio Diario</h3>
+                <p class="font-editorial text-5xl text-gradient stat-value">140</p>
+                <p class="text-sm text-gray-400 mt-2">Mensajes por día</p>
+            </div>
+        </section>
+
+        <!-- SECTION 2: MONTHLY ACTIVITY CHART -->
+        <section class="glass-panel p-6 md:p-10 rounded-[2rem] reveal">
+            <div class="flex justify-between items-end mb-8">
+                <div>
+                    <h2 class="font-editorial text-4xl mb-2">El Ritmo de 2025</h2>
+                    <p class="text-gray-500">Volumen de conversación mes a mes</p>
+                </div>
+                <div class="hidden md:block text-right">
+                    <p class="text-xs text-gray-400 uppercase tracking-widest">Pico Máximo</p>
+                    <p class="font-bold text-xl text-pink-500">Septiembre</p>
+                </div>
+            </div>
+            
+            <div class="h-[300px] w-full">
+                <canvas id="monthlyChart"></canvas>
+            </div>
+        </section>
+
+        <!-- SECTION 3: BATTLE OF PROFILES -->
+        <section class="reveal">
+            <div class="text-center mb-12">
+                <h2 class="font-editorial text-5xl mb-4">Dinámicas de Poder</h2>
+                <p class="text-gray-500">¿Quién es quién en el chat?</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Luis Profile -->
+                <div class="glass-card p-8 rounded-[2rem] relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 group-hover:opacity-20 transition-opacity"></div>
+                    
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="font-editorial text-3xl">Luis Ortiz</h3>
+                        <span class="bg-blue-100 text-blue-800 text-xs px-3 py-1 rounded-full uppercase tracking-wide font-bold">El Narrador</span>
+                    </div>
+
+                    <ul class="space-y-6">
+                        <li>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-gray-500">Volumen de Mensajes</span>
+                                <span class="font-bold">57.4%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                <div class="bg-blue-900 h-2 rounded-full" style="width: 57.4%"></div>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="p-3 bg-gray-100 rounded-xl"><i data-lucide="zap" class="w-5 h-5"></i></div>
+                            <div>
+                                <p class="text-sm text-gray-500">Velocidad de Respuesta</p>
+                                <p class="font-bold text-lg">1.0 min <span class="text-xs font-normal text-green-600">(Flash)</span></p>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="p-3 bg-gray-100 rounded-xl"><i data-lucide="book-open" class="w-5 h-5"></i></div>
+                            <div>
+                                <p class="text-sm text-gray-500">Vocabulario Único</p>
+                                <p class="font-bold text-lg">9,098 palabras</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Nadia Profile -->
+                <div class="glass-card p-8 rounded-[2rem] relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-pink-500 rounded-full mix-blend-multiply filter blur-3xl opacity-10 group-hover:opacity-20 transition-opacity"></div>
+                    
+                    <div class="flex items-center justify-between mb-8">
+                        <h3 class="font-editorial text-3xl">Nadia ♡</h3>
+                        <span class="bg-pink-100 text-pink-800 text-xs px-3 py-1 rounded-full uppercase tracking-wide font-bold">El Corazón</span>
+                    </div>
+
+                    <ul class="space-y-6">
+                        <li>
+                            <div class="flex justify-between text-sm mb-2">
+                                <span class="text-gray-500">Volumen de Mensajes</span>
+                                <span class="font-bold">42.6%</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                                <div class="bg-pink-500 h-2 rounded-full" style="width: 42.6%"></div>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="p-3 bg-gray-100 rounded-xl"><i data-lucide="smile" class="w-5 h-5"></i></div>
+                            <div>
+                                <p class="text-sm text-gray-500">Risas (Promedio de 'Jaja')</p>
+                                <p class="font-bold text-lg">Más concisa (5.1 letras)</p>
+                            </div>
+                        </li>
+                        <li class="flex items-center gap-4">
+                            <div class="p-3 bg-gray-100 rounded-xl"><i data-lucide="help-circle" class="w-5 h-5"></i></div>
+                            <div>
+                                <p class="text-sm text-gray-500">Curiosidad</p>
+                                <p class="font-bold text-lg">2,609 preguntas</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: THE LOVE DEPARTMENT -->
+        <section class="glass-panel p-8 md:p-12 rounded-[2rem] bg-gradient-to-b from-white to-pink-50/50 reveal border-pink-100">
+            <div class="text-center max-w-2xl mx-auto mb-10">
+                <div class="animate-breathe inline-block text-4xl mb-4">❤️</div>
+                <h2 class="font-editorial text-5xl mb-4 text-gray-900">Departamento del Amor</h2>
+                <p class="text-gray-500 italic text-lg">"El 7 de Junio de 2025 todo cambió..."</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h4 class="font-bold text-gray-400 uppercase tracking-widest text-xs mb-6">Contador de "Te Amo"</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-white/60 rounded-xl border border-white">
+                            <span class="text-gray-600">Junio</span>
+                            <div class="flex items-center gap-2">
+                                <div class="h-2 w-16 bg-pink-200 rounded-full overflow-hidden"><div class="h-full bg-pink-500 w-[30%]"></div></div>
+                                <span class="font-bold text-pink-600">79</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-white/60 rounded-xl border border-white scale-105 shadow-sm">
+                            <span class="text-gray-600">Septiembre</span>
+                            <div class="flex items-center gap-2">
+                                <div class="h-2 w-16 bg-pink-200 rounded-full overflow-hidden"><div class="h-full bg-pink-500 w-[100%]"></div></div>
+                                <span class="font-bold text-pink-600">209</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-white/60 rounded-xl border border-white">
+                            <span class="text-gray-600">Diciembre</span>
+                            <div class="flex items-center gap-2">
+                                <div class="h-2 w-16 bg-pink-200 rounded-full overflow-hidden"><div class="h-full bg-pink-500 w-[80%]"></div></div>
+                                <span class="font-bold text-pink-600">170</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-center md:text-left">
+                    <h3 class="font-editorial text-3xl mb-4">El Factor Nostalgia</h3>
+                    <p class="text-gray-600 mb-6 leading-relaxed">
+                        Mientras que el amor se disparó en verano, la nostalgia también jugó su papel. 
+                        Luis expresó "Te extraño" <span class="font-bold text-gray-900">173 veces</span>, 
+                        casi 7 veces más que Nadia.
+                    </p>
+                    <div class="inline-flex items-center gap-2 px-4 py-2 bg-pink-100 text-pink-700 rounded-lg text-sm font-medium">
+                        <i data-lucide="heart-handshake" class="w-4 h-4"></i>
+                        Primer "Te Amo": 07/06/2025
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 5: WORD CLOUD & EMOJIS -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-6 reveal">
+            <!-- Word Cloud -->
+            <div class="glass-card p-8 rounded-3xl flex flex-col justify-center items-center text-center relative overflow-hidden">
+                <div class="absolute inset-0 noise-bg opacity-10"></div>
+                <h3 class="text-gray-400 text-xs uppercase tracking-widest mb-8 z-10">Palabras más usadas</h3>
+                <div class="flex flex-wrap justify-center gap-3 z-10">
+                    <span class="text-4xl font-editorial text-gray-800">Corazón</span>
+                    <span class="text-3xl font-editorial text-pink-600">Amor</span>
+                    <span class="text-2xl font-editorial text-gray-600">Vida</span>
+                    <span class="text-xl text-gray-400">Jajaja</span>
+                    <span class="text-xl text-gray-500">Gracias</span>
+                    <span class="text-lg text-gray-400">Quiero</span>
+                    <span class="text-2xl font-editorial text-gray-700">Mucho</span>
+                </div>
+            </div>
+
+            <!-- Top Emojis -->
+            <div class="glass-card p-8 rounded-3xl relative">
+                <h3 class="text-gray-400 text-xs uppercase tracking-widest mb-6">Top 5 Emojis</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl">😭</span>
+                        <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-blue-300 w-full rounded-full"></div>
+                        </div>
+                        <span class="font-mono text-sm text-gray-500">1,731</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl">👀</span>
+                        <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-gray-400 w-[67%] rounded-full"></div>
+                        </div>
+                        <span class="font-mono text-sm text-gray-500">1,168</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl">❤</span>
+                        <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-red-400 w-[57%] rounded-full"></div>
+                        </div>
+                        <span class="font-mono text-sm text-gray-500">990</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <span class="text-3xl">🥺</span>
+                        <div class="flex-1 h-3 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-yellow-400 w-[52%] rounded-full"></div>
+                        </div>
+                        <span class="font-mono text-sm text-gray-500">914</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 6: ROUTINES -->
+        <section class="glass-panel p-8 rounded-[2rem] reveal text-center">
+            <h2 class="font-editorial text-3xl mb-8">Sincronización del Sueño</h2>
+            <div class="flex flex-col md:flex-row justify-center gap-12 items-center">
+                <div class="flex flex-col items-center">
+                    <i data-lucide="sun" class="w-8 h-8 text-orange-400 mb-2"></i>
+                    <span class="text-xs uppercase tracking-wide text-gray-400 mb-1">Despertar</span>
+                    <div class="text-2xl font-medium text-gray-800">07:25 <span class="text-gray-300">vs</span> 07:46</div>
+                    <span class="text-xs text-gray-400 mt-1">Luis se levanta primero</span>
+                </div>
+                <div class="w-px h-12 bg-gray-200 hidden md:block"></div>
+                <div class="flex flex-col items-center">
+                    <i data-lucide="moon" class="w-8 h-8 text-indigo-400 mb-2"></i>
+                    <span class="text-xs uppercase tracking-wide text-gray-400 mb-1">Dormir</span>
+                    <div class="text-2xl font-medium text-gray-800">23:00 <span class="text-gray-300">vs</span> 22:46</div>
+                    <span class="text-xs text-gray-400 mt-1">Nadia duerme primero</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="text-center py-20 reveal">
+            <div class="inline-block p-4 rounded-full bg-white shadow-sm mb-6">
+                <i data-lucide="infinity" class="w-8 h-8 text-gray-800"></i>
+            </div>
+            <h2 class="font-editorial text-4xl md:text-5xl text-gray-900 mb-4">Por otro año de mensajes.</h2>
+            <p class="text-gray-500">Generado con ❤️ por belekingg python</p>
+        </footer>
+
+    </main>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Inicializar Iconos
+        lucide.createIcons();
+
+        // Configuración de Gráficas
+        const ctx = document.getElementById('monthlyChart').getContext('2d');
+        const monthlyChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                datasets: [{
+                    label: 'Mensajes',
+                    data: [1094, 3847, 3192, 3091, 4671, 4935, 5625, 5744, 4689, 3317, 4520],
+                    backgroundColor: function(context) {
+                        const chart = context.chart;
+                        const {ctx, chartArea} = chart;
+                        if (!chartArea) return null;
+                        
+                        // Gradiente para las barras
+                        const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+                        gradient.addColorStop(0, '#E9D5FF'); // Purple 200
+                        gradient.addColorStop(1, '#DB2777'); // Pink 600
+                        return gradient;
+                    },
+                    borderRadius: 6,
+                    borderSkipped: false,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                        titleColor: '#2D1B2E',
+                        bodyColor: '#2D1B2E',
+                        borderColor: '#E5E7EB',
+                        borderWidth: 1,
+                        padding: 12,
+                        displayColors: false,
+                        titleFont: { family: 'Playfair Display', size: 14 },
+                        bodyFont: { family: 'Inter', size: 14, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { display: true, color: 'rgba(0,0,0,0.03)' },
+                        border: { display: false }
+                    },
+                    x: {
+                        grid: { display: false },
+                        border: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Animación de Scroll (Intersection Observer)
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Solo animar una vez
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
